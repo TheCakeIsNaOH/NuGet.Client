@@ -17,6 +17,15 @@ namespace NuGet.Protocol.Core.Types
             ILogger log,
             CancellationToken token);
 
+        public abstract Task<IEnumerableAsync<IPackageSearchMetadata>> ListAsync(
+            string searchTerm,
+            bool prerelease,
+            bool allVersions,
+            bool includeDelisted,
+            SourceCacheContext sourceCacheContext,
+            ILogger log,
+            CancellationToken token);
+
         public abstract string Source { get; }
     }
 }

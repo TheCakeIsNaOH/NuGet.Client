@@ -67,5 +67,31 @@ namespace NuGet.Protocol
 
             return results.ToList();
         }
+
+        public override async Task<IEnumerable<IPackageSearchMetadata>> SearchAsync(
+            string searchTerm,
+            SearchFilter filters,
+            int skip,
+            int take,
+            SourceCacheContext sourceCacheContext,
+            Common.ILogger log,
+            CancellationToken cancellationToken)
+        {
+            var query = await _feedParser.Search(
+                searchTerm,
+                filters,
+                skip,
+                take,
+                log,
+                cancellationToken);
+
+            var metadataCache = new MetadataReferenceCache();
+            // NuGet.Server does not group packages by id, this resource needs to handle it.
+            var results = query.GroupBy(p => p.Id)
+                .Select(group => group.OrderByDescending(p => p.Version).First())
+                .Select(package => V2FeedUtilities.CreatePackageSearchResult(package, metadataCache, filters, _feedParser, log, cancellationToken));
+
+            return results.ToList();
+        }
     }
 }

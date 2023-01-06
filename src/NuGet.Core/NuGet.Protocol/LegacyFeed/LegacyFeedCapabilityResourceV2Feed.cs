@@ -38,28 +38,42 @@ namespace NuGet.Protocol
 
         public override async Task<bool> SupportsIsAbsoluteLatestVersionAsync(ILogger log, CancellationToken token)
         {
-            var capabilities = await GetCachedCapabilitiesAsync(log, token);
+            var capabilities = await GetCachedCapabilitiesAsync(null, log, token);
 
             return capabilities.SupportsIsAbsoluteLatestVersion;
         }
 
         public override async Task<bool> SupportsSearchAsync(ILogger log, CancellationToken token)
         {
-            var capabilities = await GetCachedCapabilitiesAsync(log, token);
+            var capabilities = await GetCachedCapabilitiesAsync(null, log, token);
 
             return capabilities.SupportsSearch;
         }
 
-        private async Task<Capabilities> GetCachedCapabilitiesAsync(ILogger log, CancellationToken token)
+        public override async Task<bool> SupportsIsAbsoluteLatestVersionAsync(SourceCacheContext sourceCacheContext, ILogger log, CancellationToken token)
+        {
+            var capabilities = await GetCachedCapabilitiesAsync(sourceCacheContext, log, token);
+
+            return capabilities.SupportsIsAbsoluteLatestVersion;
+        }
+
+        public override async Task<bool> SupportsSearchAsync(SourceCacheContext sourceCacheContext, ILogger log, CancellationToken token)
+        {
+            var capabilities = await GetCachedCapabilitiesAsync(sourceCacheContext, log, token);
+
+            return capabilities.SupportsSearch;
+        }
+
+        private async Task<Capabilities> GetCachedCapabilitiesAsync(SourceCacheContext sourceCacheContext, ILogger log, CancellationToken token)
         {
             var task = CachedCapabilities.GetOrAdd(
                 _metadataUri,
-                key => GetCapabilitiesAsync(key, log, token));
+                key => GetCapabilitiesAsync(key, sourceCacheContext, log, token));
 
             return await task;
         }
 
-        private async Task<Capabilities> GetCapabilitiesAsync(string metadataUri, ILogger log, CancellationToken token)
+        private async Task<Capabilities> GetCapabilitiesAsync(string metadataUri, SourceCacheContext sourceCacheContext, ILogger log, CancellationToken token)
         {
             var capabilities = new Capabilities
             {
@@ -70,11 +84,13 @@ namespace NuGet.Protocol
             XDocument document;
             try
             {
+                var cacheKey = $"list_{metadataUri}_page1"; ;
+
                 document = await _feedParser.LoadXmlAsync(
                     metadataUri,
-                    cacheKey: null,
+                    cacheKey: cacheKey,
                     ignoreNotFounds: true,
-                    sourceCacheContext: null,
+                    sourceCacheContext: sourceCacheContext,
                     log: log,
                     token: token);
 

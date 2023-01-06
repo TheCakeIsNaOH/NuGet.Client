@@ -11,5 +11,7 @@ namespace NuGet.Protocol.Core.Types
     {
         Task<bool> SupportsIsAbsoluteLatestVersionAsync(ILogger log, CancellationToken token);
         Task<bool> SupportsSearchAsync(ILogger log, CancellationToken token);
+        Task<bool> SupportsSearchAsync(SourceCacheContext sourceCacheContext, ILogger log, CancellationToken token);
+        Task<bool> SupportsIsAbsoluteLatestVersionAsync(SourceCacheContext sourceCacheContext, ILogger log, CancellationToken token);
     }
 }

@@ -242,7 +242,7 @@ namespace NuGet.Versioning
                         range = new FloatRange(behavior, version, releasePrefix);
                     }
                 }
-                // A single * can only appear as the last char in the string. 
+                // A single * can only appear as the last char in the string.
                 // * cannot appear in the metadata section after the +
                 else if (lastStarPosition == versionString.Length - 1 && versionString.IndexOf('+') == -1)
                 {

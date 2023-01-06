@@ -33,6 +33,18 @@ namespace NuGet.Protocol
             SearchFilter filters,
             int skip,
             int take,
+            SourceCacheContext cacheContext,
+            ILogger log,
+            CancellationToken token)
+        {
+            return await SearchAsync(searchTerm, filters, skip, take, log, token);
+        }
+
+        public async override Task<IEnumerable<IPackageSearchMetadata>> SearchAsync(
+            string searchTerm,
+            SearchFilter filters,
+            int skip,
+            int take,
             ILogger log,
             CancellationToken token)
         {
@@ -170,7 +182,7 @@ namespace NuGet.Protocol
         /// <summary>
         /// Returns a distinct set of elements using the comparer specified. This implementation will pick the last occurrence
         /// of each element instead of picking the first. This method assumes that similar items occur in order.
-        /// </summary>        
+        /// </summary>
         private static IEnumerable<LocalPackageInfo> CollapseToHighestVersion(IEnumerable<LocalPackageInfo> source)
         {
             bool first = true;

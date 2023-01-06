@@ -55,6 +55,18 @@ namespace NuGet.Protocol
             _searchEndpoints = searchEndpoints?.ToArray() ?? throw new ArgumentNullException(nameof(searchEndpoints));
         }
 
+        public async override Task<IEnumerable<IPackageSearchMetadata>> SearchAsync(
+            string searchTerm,
+            SearchFilter filters,
+            int skip,
+            int take,
+            SourceCacheContext cacheContext,
+            Common.ILogger log,
+            CancellationToken token)
+        {
+            return await SearchAsync(searchTerm, filters, skip, take, log, token);
+        }
+
         /// <summary>
         /// Query nuget package list from nuget server. This implementation optimized for performance so doesn't iterate whole result
         /// returned nuget server, so as soon as find "take" number of result packages then stop processing and return the result.

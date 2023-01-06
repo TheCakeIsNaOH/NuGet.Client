@@ -109,6 +109,89 @@ namespace NuGet.Protocol
             return new EnumerableAsync<IPackageSearchMetadata>(_feedParser, searchTerm, filter, 0, Take, isSearchSupported, allVersions,
                         logger, token);
         }
+
+        public async override Task<IEnumerableAsync<IPackageSearchMetadata>> ListAsync(
+            string searchTerm,
+            bool prerelease,
+            bool allVersions,
+            bool includeDelisted,
+            SourceCacheContext sourceCacheContext,
+            ILogger logger,
+            CancellationToken token)
+        {
+            var isSearchSupported = await _feedCapabilities.SupportsSearchAsync(sourceCacheContext, logger, token);
+            SearchFilter filter = null;
+            if (isSearchSupported)
+            {
+                if (allVersions)
+                {
+                    filter = new SearchFilter(includePrerelease: prerelease, filter: null)
+                    {
+                        OrderBy = SearchOrderBy.Id,
+                        IncludeDelisted = includeDelisted
+                    };
+                }
+                else
+                {
+                    var supportsIsAbsoluteLatestVersion =
+                        await _feedCapabilities.SupportsIsAbsoluteLatestVersionAsync(sourceCacheContext, logger, token);
+                    if (prerelease && supportsIsAbsoluteLatestVersion)
+                    {
+                        filter = new SearchFilter(includePrerelease: true, filter: SearchFilterType.IsAbsoluteLatestVersion)
+                        {
+                            OrderBy = SearchOrderBy.Id,
+                            IncludeDelisted = includeDelisted
+                        };
+                    }
+                    else
+                    {
+                        filter = new SearchFilter(includePrerelease: false,
+                            filter: SearchFilterType.IsLatestVersion)
+                        {
+                            OrderBy = SearchOrderBy.Id,
+                            IncludeDelisted = includeDelisted
+                        };
+                    }
+                }
+            }
+            else
+            {
+                if (allVersions)
+                {
+                    filter = new SearchFilter(includePrerelease: prerelease, filter: null)
+                    {
+                        IncludeDelisted = includeDelisted,
+                        OrderBy = SearchOrderBy.Id
+                    };
+                }
+                else
+                {
+                    var supportsIsAbsoluteLatestVersion =
+                        await _feedCapabilities.SupportsIsAbsoluteLatestVersionAsync(sourceCacheContext, logger, token);
+                    if (prerelease && supportsIsAbsoluteLatestVersion)
+                    {
+                        filter = new SearchFilter(includePrerelease: true,
+                            filter: SearchFilterType.IsAbsoluteLatestVersion)
+                        {
+                            IncludeDelisted = includeDelisted,
+                            OrderBy = SearchOrderBy.Id
+                        };
+                    }
+                    else
+                    {
+                        filter = new SearchFilter(includePrerelease: false,
+                            filter: SearchFilterType.IsLatestVersion)
+                        {
+                            OrderBy = SearchOrderBy.Id,
+                            IncludeDelisted = includeDelisted
+                        };
+                    }
+                }
+
+            }
+            return new EnumerableAsync<IPackageSearchMetadata>(_feedParser, searchTerm, filter, 0, Take, isSearchSupported, allVersions,
+                sourceCacheContext, logger, token);
+        }
     }
 }
 
@@ -123,6 +206,7 @@ internal class EnumerableAsync<T> : IEnumerableAsync<T>
     private readonly IV2FeedParser _feedParser;
     private readonly bool _isSearchAvailable;
     private readonly bool _allVersions;
+    private SourceCacheContext _cacheContext;
 
 
     public EnumerableAsync(IV2FeedParser feedParser, string searchTerm, SearchFilter filter, int skip, int take, bool isSearchAvailable, bool allVersions, ILogger logger, CancellationToken token)
@@ -138,9 +222,23 @@ internal class EnumerableAsync<T> : IEnumerableAsync<T>
         _token = token;
     }
 
+    public EnumerableAsync(IV2FeedParser feedParser, string searchTerm, SearchFilter filter, int skip, int take, bool isSearchAvailable, bool allVersions, SourceCacheContext cacheContext, ILogger logger, CancellationToken token)
+    {
+        _feedParser = feedParser;
+        _searchTerm = searchTerm;
+        _filter = filter;
+        _skip = skip;
+        _take = take;
+        _isSearchAvailable = isSearchAvailable;
+        _allVersions = allVersions;
+        _logger = logger;
+        _token = token;
+        _cacheContext = cacheContext;
+    }
+
     public IEnumeratorAsync<T> GetEnumeratorAsync()
     {
-        return (IEnumeratorAsync<T>)new EnumeratorAsync(_feedParser, _searchTerm, _filter, _skip, _take, _isSearchAvailable, _allVersions, _logger, _token);
+        return (IEnumeratorAsync<T>)new EnumeratorAsync(_feedParser, _searchTerm, _filter, _skip, _take, _isSearchAvailable, _allVersions, _cacheContext, _logger, _token);
     }
 }
 
@@ -155,7 +253,7 @@ internal class EnumeratorAsync : IEnumeratorAsync<IPackageSearchMetadata>
     private readonly IV2FeedParser _feedParser;
     private readonly bool _isSearchAvailable;
     private readonly bool _allVersions;
-
+    private SourceCacheContext _cacheContext;
 
     private IEnumerator<IPackageSearchMetadata> _currentEnumerator;
     private V2FeedPage _currentPage;
@@ -172,6 +270,21 @@ internal class EnumeratorAsync : IEnumeratorAsync<IPackageSearchMetadata>
         _allVersions = allVersions;
         _logger = logger;
         _token = token;
+    }
+
+    public EnumeratorAsync(IV2FeedParser feedParser, string searchTerm, SearchFilter filter, int skip, int take, bool isSearchAvailable, bool allVersions,
+        SourceCacheContext cacheContext, ILogger logger, CancellationToken token)
+    {
+        _feedParser = feedParser;
+        _searchTerm = searchTerm;
+        _filter = filter;
+        _skip = skip;
+        _take = take;
+        _isSearchAvailable = isSearchAvailable;
+        _allVersions = allVersions;
+        _logger = logger;
+        _token = token;
+        _cacheContext = cacheContext;
     }
 
     public IPackageSearchMetadata Current
@@ -191,8 +304,8 @@ internal class EnumeratorAsync : IEnumeratorAsync<IPackageSearchMetadata>
 
 
             _currentPage = _isSearchAvailable
-                ? await _feedParser.GetSearchPageAsync(_searchTerm, _filter, _skip, _take, _logger, _token)
-                : await _feedParser.GetPackagesPageAsync(_searchTerm, _filter, _skip, _take, _logger, _token);
+                ? await _feedParser.GetSearchPageAsync(_searchTerm, _filter, _skip, _take, _cacheContext, _logger, _token)
+                : await _feedParser.GetPackagesPageAsync(_searchTerm, _filter, _skip, _take, _cacheContext, _logger, _token);
 
 
             var results = _allVersions ?
@@ -225,8 +338,8 @@ internal class EnumeratorAsync : IEnumeratorAsync<IPackageSearchMetadata>
                 }
                 _skip += _take;
                 _currentPage = _isSearchAvailable
-                                    ? await _feedParser.GetSearchPageAsync(_searchTerm, _filter, _skip, _take, _logger, _token)
-                                    : await _feedParser.GetPackagesPageAsync(_searchTerm, _filter, _skip, _take, _logger, _token);
+                                    ? await _feedParser.GetSearchPageAsync(_searchTerm, _filter, _skip, _take, _cacheContext, _logger, _token)
+                                    : await _feedParser.GetPackagesPageAsync(_searchTerm, _filter, _skip, _take, _cacheContext, _logger, _token);
 
                 var results = _allVersions ?
                _currentPage.Items.GroupBy(p => p.Id)

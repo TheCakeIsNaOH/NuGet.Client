@@ -187,6 +187,15 @@ namespace NuGet.Protocol.Tests
                 _actualTake = take;
                 return Task.FromResult(new List<IPackageSearchMetadata>().AsEnumerable());
             }
+
+            public override Task<IEnumerable<IPackageSearchMetadata>> SearchAsync(string searchTerm, SearchFilter filters, int skip, int take, SourceCacheContext cacheContext, ILogger log, CancellationToken cancellationToken)
+            {
+                _actualSearchTerm = searchTerm;
+                _searchFilter = filters;
+                _actualSkip = skip;
+                _actualTake = take;
+                return Task.FromResult(new List<IPackageSearchMetadata>().AsEnumerable());
+            }
         }
     }
 

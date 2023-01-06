@@ -6,7 +6,12 @@
 //////////////////////////////////////////////////////////
 
 using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml.Linq;
+using NuGet.Common;
+using NuGet.Protocol.Core.Types;
 
 namespace NuGet.Protocol
 {
@@ -78,6 +83,83 @@ namespace NuGet.Protocol
             }
 
             return null;
+        }
+
+        public async Task<IReadOnlyList<V2FeedPackageInfo>> Search(
+            string searchTerm,
+            SearchFilter filters,
+            int skip,
+            int take,
+            SourceCacheContext sourceCacheContext,
+            ILogger log,
+            CancellationToken token)
+        {
+            var uri = _queryBuilder.BuildSearchUri(searchTerm, filters, skip, take);
+
+            var page = await QueryV2FeedAsync(
+                uri,
+                id: null,
+                max: take,
+                ignoreNotFounds: false,
+                sourceCacheContext: sourceCacheContext,
+                log: log,
+                token: token);
+
+            return page.Items;
+        }
+
+        public async Task<V2FeedPage> GetPackagesPageAsync(
+            string searchTerm,
+            SearchFilter filters,
+            int skip,
+            int take,
+            SourceCacheContext sourceCacheContext,
+            ILogger log,
+            CancellationToken token)
+        {
+            var uri = _queryBuilder.BuildGetPackagesUri(
+                searchTerm,
+                filters,
+                skip,
+                take);
+
+            var page = await QueryV2FeedAsync(
+                uri,
+                id: null,
+                max: take, // Only get the first page.
+                ignoreNotFounds: false,
+                sourceCacheContext: sourceCacheContext,
+                log: log,
+                token: token);
+
+            return page;
+        }
+
+        public async Task<V2FeedPage> GetSearchPageAsync(
+            string searchTerm,
+            SearchFilter filters,
+            int skip,
+            int take,
+            SourceCacheContext sourceCacheContext,
+            ILogger log,
+            CancellationToken token)
+        {
+            var uri = _queryBuilder.BuildSearchUri(
+                searchTerm,
+                filters,
+                skip: skip,
+                take: take);
+
+            var page = await QueryV2FeedAsync(
+                uri,
+                id: null,
+                max: take, // Only get the first page.
+                ignoreNotFounds: false,
+                sourceCacheContext: sourceCacheContext,
+                log: log,
+                token: token);
+
+            return page;
         }
     }
 }

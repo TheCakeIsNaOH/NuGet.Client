@@ -19,5 +19,17 @@ namespace NuGet.Protocol.Core.Types
             int take,
             Common.ILogger log,
             CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Retrieves search results
+        /// </summary>
+        public abstract Task<IEnumerable<IPackageSearchMetadata>> SearchAsync(
+            string searchTerm,
+            SearchFilter filters,
+            int skip,
+            int take,
+            SourceCacheContext sourceCacheContext,
+            Common.ILogger log,
+            CancellationToken cancellationToken);
     }
 }

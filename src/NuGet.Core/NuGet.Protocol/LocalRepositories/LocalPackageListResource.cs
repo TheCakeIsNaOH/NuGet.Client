@@ -22,6 +22,13 @@ namespace NuGet.Protocol
         }
         public override string Source => _baseAddress;
 
+        public override Task<IEnumerableAsync<IPackageSearchMetadata>> ListAsync(string searchTerm, bool prerelease,
+            bool allVersions, bool includeDelisted, SourceCacheContext cacheContext, ILogger logger,
+            CancellationToken token)
+        {
+            return ListAsync(searchTerm, prerelease, allVersions, includeDelisted, logger, token);
+        }
+
         public override Task<IEnumerableAsync<IPackageSearchMetadata>> ListAsync(string searchTerm, bool prerelease, bool allVersions, bool includeDelisted, ILogger logger,
             CancellationToken token)
         {
@@ -112,7 +119,7 @@ namespace NuGet.Protocol
             public async Task<bool> MoveNextAsync()
             {
                 if (_currentEnumerator == null)
-                { // NOTE: We need to sort the values so this is very innefficient by design. 
+                { // NOTE: We need to sort the values so this is very innefficient by design.
                   // The FS search resource would return the results ordered in FS nat ordering.
                     var results = await _packageSearchResource.SearchAsync(
                         _searchTerm, _filter, 0, int.MaxValue, _logger, _token);

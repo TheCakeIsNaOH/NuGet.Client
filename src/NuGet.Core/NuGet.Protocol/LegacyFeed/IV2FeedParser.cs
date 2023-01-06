@@ -25,5 +25,23 @@ namespace NuGet.Protocol
             int take,
             ILogger log,
             CancellationToken token);
+
+        Task<V2FeedPage> GetPackagesPageAsync(
+            string searchTerm,
+            SearchFilter filters,
+            int skip,
+            int take,
+            SourceCacheContext sourceCacheContext,
+            ILogger log,
+            CancellationToken token);
+
+        Task<V2FeedPage> GetSearchPageAsync(
+            string searchTerm,
+            SearchFilter filters,
+            int skip,
+            int take,
+            SourceCacheContext sourceCacheContext,
+            ILogger log,
+            CancellationToken token);
     }
 }
