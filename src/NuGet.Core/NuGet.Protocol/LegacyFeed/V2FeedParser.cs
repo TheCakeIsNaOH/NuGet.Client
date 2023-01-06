@@ -752,7 +752,7 @@ namespace NuGet.Protocol
                         return request;
                     })
                 {
-                    IsRetry = true
+                    IsRetry = false
                 },
                 async response =>
                 {
