@@ -40,6 +40,7 @@ NuGet.Protocol.Core.Types.IPackageSearchMetadata.IsDownloadCacheAvailable.get ->
 NuGet.Protocol.Core.Types.IPackageSearchMetadata.MailingListUrl.get -> System.Uri
 NuGet.Protocol.Core.Types.IPackageSearchMetadata.PackageApprovedDate.get -> System.DateTime?
 NuGet.Protocol.Core.Types.IPackageSearchMetadata.PackageCleanupResultDate.get -> System.DateTime?
+NuGet.Protocol.Core.Types.IPackageSearchMetadata.PackageFeed.get -> string
 NuGet.Protocol.Core.Types.IPackageSearchMetadata.PackageHash.get -> string
 NuGet.Protocol.Core.Types.IPackageSearchMetadata.PackageHashAlgorithm.get -> string
 NuGet.Protocol.Core.Types.IPackageSearchMetadata.PackagePath.get -> string
@@ -85,6 +86,8 @@ NuGet.Protocol.Core.Types.PackageSearchMetadataBuilder.ClonedPackageSearchMetada
 NuGet.Protocol.Core.Types.PackageSearchMetadataBuilder.ClonedPackageSearchMetadata.PackageApprovedDate.set -> void
 NuGet.Protocol.Core.Types.PackageSearchMetadataBuilder.ClonedPackageSearchMetadata.PackageCleanupResultDate.get -> System.DateTime?
 NuGet.Protocol.Core.Types.PackageSearchMetadataBuilder.ClonedPackageSearchMetadata.PackageCleanupResultDate.set -> void
+NuGet.Protocol.Core.Types.PackageSearchMetadataBuilder.ClonedPackageSearchMetadata.PackageFeed.get -> string
+NuGet.Protocol.Core.Types.PackageSearchMetadataBuilder.ClonedPackageSearchMetadata.PackageFeed.set -> void
 NuGet.Protocol.Core.Types.PackageSearchMetadataBuilder.ClonedPackageSearchMetadata.PackageHash.get -> string
 NuGet.Protocol.Core.Types.PackageSearchMetadataBuilder.ClonedPackageSearchMetadata.PackageHash.set -> void
 NuGet.Protocol.Core.Types.PackageSearchMetadataBuilder.ClonedPackageSearchMetadata.PackageHashAlgorithm.get -> string
@@ -150,6 +153,8 @@ NuGet.Protocol.LocalPackageSearchMetadata.IsDownloadCacheAvailable.get -> bool
 NuGet.Protocol.LocalPackageSearchMetadata.MailingListUrl.get -> System.Uri
 NuGet.Protocol.LocalPackageSearchMetadata.PackageApprovedDate.get -> System.DateTime?
 NuGet.Protocol.LocalPackageSearchMetadata.PackageCleanupResultDate.get -> System.DateTime?
+NuGet.Protocol.LocalPackageSearchMetadata.PackageFeed.get -> string
+NuGet.Protocol.LocalPackageSearchMetadata.PackageFeed.set -> void
 NuGet.Protocol.LocalPackageSearchMetadata.PackageHash.get -> string
 NuGet.Protocol.LocalPackageSearchMetadata.PackageHashAlgorithm.get -> string
 NuGet.Protocol.LocalPackageSearchMetadata.PackageReviewedDate.get -> System.DateTime?
@@ -188,6 +193,8 @@ NuGet.Protocol.PackageSearchMetadata.PackageApprovedDate.get -> System.DateTime?
 NuGet.Protocol.PackageSearchMetadata.PackageApprovedDate.set -> void
 NuGet.Protocol.PackageSearchMetadata.PackageCleanupResultDate.get -> System.DateTime?
 NuGet.Protocol.PackageSearchMetadata.PackageCleanupResultDate.set -> void
+NuGet.Protocol.PackageSearchMetadata.PackageFeed.get -> string
+NuGet.Protocol.PackageSearchMetadata.PackageFeed.set -> void
 NuGet.Protocol.PackageSearchMetadata.PackageHash.get -> string
 NuGet.Protocol.PackageSearchMetadata.PackageHash.set -> void
 NuGet.Protocol.PackageSearchMetadata.PackageHashAlgorithm.get -> string
@@ -238,6 +245,7 @@ NuGet.Protocol.PackageSearchMetadataV2Feed.IsPrerelease.get -> bool
 NuGet.Protocol.PackageSearchMetadataV2Feed.MailingListUrl.get -> System.Uri
 NuGet.Protocol.PackageSearchMetadataV2Feed.PackageApprovedDate.get -> System.DateTime?
 NuGet.Protocol.PackageSearchMetadataV2Feed.PackageCleanupResultDate.get -> System.DateTime?
+NuGet.Protocol.PackageSearchMetadataV2Feed.PackageFeed.get -> string
 NuGet.Protocol.PackageSearchMetadataV2Feed.PackageHash.get -> string
 NuGet.Protocol.PackageSearchMetadataV2Feed.PackageHashAlgorithm.get -> string
 NuGet.Protocol.PackageSearchMetadataV2Feed.PackagePath.get -> string
@@ -271,6 +279,7 @@ NuGet.Protocol.V2FeedPackageInfo.IsPrerelease.get -> bool
 NuGet.Protocol.V2FeedPackageInfo.MailingListUrl.get -> string
 NuGet.Protocol.V2FeedPackageInfo.PackageApprovedDate.get -> System.DateTime?
 NuGet.Protocol.V2FeedPackageInfo.PackageCleanupResultDate.get -> System.DateTime?
+NuGet.Protocol.V2FeedPackageInfo.PackageFeed.get -> string
 NuGet.Protocol.V2FeedPackageInfo.PackageReviewedDate.get -> System.DateTime?
 NuGet.Protocol.V2FeedPackageInfo.PackageReviewer.get -> string
 NuGet.Protocol.V2FeedPackageInfo.PackageScanFlagResult.get -> string
@@ -286,7 +295,7 @@ NuGet.Protocol.V2FeedPackageInfo.PackageValidationResultDate.get -> System.DateT
 NuGet.Protocol.V2FeedPackageInfo.PackageValidationResultStatus.get -> string
 NuGet.Protocol.V2FeedPackageInfo.ProjectSourceUrl.get -> string
 NuGet.Protocol.V2FeedPackageInfo.ReleaseNotes.get -> string
-NuGet.Protocol.V2FeedPackageInfo.V2FeedPackageInfo(NuGet.Packaging.Core.PackageIdentity identity, string title, string summary, string description, System.Collections.Generic.IEnumerable<string> authors, System.Collections.Generic.IEnumerable<string> owners, string iconUrl, string licenseUrl, string projectUrl, string reportAbuseUrl, string galleryDetailsUrl, string tags, System.DateTimeOffset? created, System.DateTimeOffset? lastEdited, System.DateTimeOffset? published, string dependencies, bool requireLicenseAccept, string downloadUrl, string downloadCount, string packageHash, string packageHashAlgorithm, NuGet.Versioning.NuGetVersion minClientVersion, long? packageSize, int? versionDownloadCount, bool isApproved, string packageStatus, string packageSubmittedStatus, string packageTestResultStatus, System.DateTime? packageTestResultStatusDate, string packageValidationResultStatus, System.DateTime? packageValidationResultDate, System.DateTime? packageCleanupResultDate, System.DateTime? packageReviewedDate, System.DateTime? packageApprovedDate, string packageReviewer, bool isDownloadCacheAvailable, System.DateTime? downloadCacheDate, string downloadCacheString, bool isLatestVersion, bool isAbsoluteLatestVersion, bool isPrerelease, string releaseNotes, string projectSourceUrl, string packageSourceUrl, string docsUrl, string mailingListUrl, string bugTrackerUrl, string downloadCacheStatus, string packageScanStatus, System.DateTime? packageScanResultDate, string packageScanFlagResult) -> void
+NuGet.Protocol.V2FeedPackageInfo.V2FeedPackageInfo(NuGet.Packaging.Core.PackageIdentity identity, string title, string summary, string description, System.Collections.Generic.IEnumerable<string> authors, System.Collections.Generic.IEnumerable<string> owners, string iconUrl, string licenseUrl, string projectUrl, string reportAbuseUrl, string galleryDetailsUrl, string tags, System.DateTimeOffset? created, System.DateTimeOffset? lastEdited, System.DateTimeOffset? published, string dependencies, bool requireLicenseAccept, string downloadUrl, string downloadCount, string packageHash, string packageHashAlgorithm, NuGet.Versioning.NuGetVersion minClientVersion, long? packageSize, int? versionDownloadCount, bool isApproved, string packageStatus, string packageSubmittedStatus, string packageTestResultStatus, System.DateTime? packageTestResultStatusDate, string packageValidationResultStatus, System.DateTime? packageValidationResultDate, System.DateTime? packageCleanupResultDate, System.DateTime? packageReviewedDate, System.DateTime? packageApprovedDate, string packageReviewer, bool isDownloadCacheAvailable, System.DateTime? downloadCacheDate, string downloadCacheString, bool isLatestVersion, bool isAbsoluteLatestVersion, bool isPrerelease, string releaseNotes, string projectSourceUrl, string packageSourceUrl, string docsUrl, string mailingListUrl, string bugTrackerUrl, string downloadCacheStatus, string packageScanStatus, System.DateTime? packageScanResultDate, string packageScanFlagResult, string packageFeed) -> void
 NuGet.Protocol.V2FeedPackageInfo.VersionDownloadCount.get -> int?
 NuGet.Protocol.V2FeedParser.SearchCountAsync(string searchTerm, NuGet.Protocol.Core.Types.SearchFilter filters, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<int>
 NuGet.Protocol.V2FeedQueryBuilder.BuildSearchUri(string searchTerm, NuGet.Protocol.Core.Types.SearchFilter filters, int skip, int take, bool isCount) -> string

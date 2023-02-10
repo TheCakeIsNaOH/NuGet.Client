@@ -85,6 +85,7 @@ namespace NuGet.Protocol
         public string PackageScanStatus { get; private set; }
         public DateTime? PackageScanResultDate { get; private set; }
         public string PackageScanFlagResult { get; private set; }
+        public string PackageFeed { get; private set; }
 
         private void FinishInitialization(V2FeedPackageInfo package)
         {
@@ -119,6 +120,7 @@ namespace NuGet.Protocol
             PackageScanStatus = package.PackageScanStatus;
             PackageScanResultDate = package.PackageScanResultDate;
             PackageScanFlagResult = package.PackageScanFlagResult;
+            PackageFeed = package.PackageFeed;
         }
     }
 }

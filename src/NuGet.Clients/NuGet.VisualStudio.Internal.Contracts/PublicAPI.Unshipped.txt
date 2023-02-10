@@ -20,6 +20,7 @@ NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.IsDownload
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.MailingListUrl.get -> System.Uri!
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.PackageApprovedDate.get -> System.DateTime?
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.PackageCleanupResultDate.get -> System.DateTime?
+NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.PackageFeed.get -> string!
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.PackageHash.get -> string!
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.PackageHashAlgorithm.get -> string!
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.PackagePath.get -> string!

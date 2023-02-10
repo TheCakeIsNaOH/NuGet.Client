@@ -34,6 +34,7 @@ namespace NuGet.Protocol.Core.Types
         IEnumerable<DownloadCache> DownloadCache { get; }
 
         public string PackagePath { get; }
+        string PackageFeed { get; }
         string ReleaseNotes { get; }
         Uri ProjectSourceUrl { get; }
         Uri PackageSourceUrl { get; }

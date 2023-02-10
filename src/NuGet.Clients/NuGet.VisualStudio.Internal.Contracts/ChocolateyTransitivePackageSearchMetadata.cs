@@ -44,5 +44,6 @@ namespace NuGet.VisualStudio.Internal.Contracts
         public string PackageScanStatus => _packageSearchMetadata.PackageScanStatus;
         public DateTime? PackageScanResultDate => _packageSearchMetadata.PackageScanResultDate;
         public string PackageScanFlagResult => _packageSearchMetadata.PackageScanFlagResult;
+        public string PackageFeed => _packageSearchMetadata.PackageFeed;
     }
 }

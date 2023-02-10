@@ -534,6 +534,7 @@ namespace NuGet.Protocol
             var packageScanStatus = metadataCache.GetString(GetString(properties, _xnamePackageScanStatus));
             var packageScanResultDate = GetNoOffsetDate(properties, _xnamePackageScanResultDate);
             var packageScanFlagResult = metadataCache.GetString(GetString(properties, _xnamePackageScanFlagResult));
+            var packageFeed = _baseAddress;
 
             return new V2FeedPackageInfo(new PackageIdentity(identityId, version), title, summary, description, authors,
                 owners, iconUrl, licenseUrl, projectUrl, reportAbuseUrl, galleryDetailsUrl, tags, created, lastEdited,
@@ -543,7 +544,7 @@ namespace NuGet.Protocol
                 packageValidationResultDate, packageCleanupResultDate, packageReviewedDate, packageApprovedDate,
                 packageReviewer, isDownloadCacheAvailable, downloadCacheDate, downloadCacheString, isLatestVersion,
                 isAbsoluteLatestVersion, isPrerelease, releaseNotes, projectSourceUrl, packageSourceUrl, docsUrl, mailingListUrl,
-                bugTrackerUrl, downloadCacheStatus, packageScanStatus, packageScanResultDate, packageScanFlagResult);
+                bugTrackerUrl, downloadCacheStatus, packageScanStatus, packageScanResultDate, packageScanFlagResult, packageFeed);
 
             //////////////////////////////////////////////////////////
             // End - Chocolatey Specific Modification

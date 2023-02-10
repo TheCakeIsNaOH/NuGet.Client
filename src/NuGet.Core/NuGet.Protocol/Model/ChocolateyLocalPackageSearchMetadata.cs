@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NuGet.Common;
 using NuGet.Packaging;
 using NuGet.Protocol.Core.Types;
 
@@ -187,5 +188,7 @@ namespace NuGet.Protocol
         /// Not applicable to local packages
         /// </remarks>
         public string PackageScanFlagResult => null;
+
+        public string PackageFeed { get; set; }
     }
 }

@@ -116,6 +116,8 @@ namespace NuGet.Protocol
 
             var metadata = new LocalPackageSearchMetadata(package);
 
+            metadata.PackageFeed = _localResource.Root;
+
             return metadata
                 .WithVersions(() => GetVersions(_localResource, package, filter, log, CancellationToken.None));
         }
@@ -170,7 +172,7 @@ namespace NuGet.Protocol
         /// <summary>
         /// Returns a distinct set of elements using the comparer specified. This implementation will pick the last occurrence
         /// of each element instead of picking the first. This method assumes that similar items occur in order.
-        /// </summary>        
+        /// </summary>
         private static IEnumerable<LocalPackageInfo> CollapseToHighestVersion(IEnumerable<LocalPackageInfo> source)
         {
             bool first = true;

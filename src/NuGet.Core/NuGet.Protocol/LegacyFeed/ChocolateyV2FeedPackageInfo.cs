@@ -44,6 +44,7 @@ namespace NuGet.Protocol
         private readonly string _packageScanStatus;
         private readonly DateTime? _packageScanResultDate;
         private readonly string _packageScanFlagResult;
+        private readonly string _packageFeed;
 
         public V2FeedPackageInfo(PackageIdentity identity, string title, string summary, string description, IEnumerable<string> authors, IEnumerable<string> owners,
             string iconUrl, string licenseUrl, string projectUrl, string reportAbuseUrl, string galleryDetailsUrl,
@@ -53,7 +54,7 @@ namespace NuGet.Protocol
             DateTime? packageValidationResultDate, DateTime? packageCleanupResultDate, DateTime? packageReviewedDate, DateTime? packageApprovedDate,
             string packageReviewer, bool isDownloadCacheAvailable, DateTime? downloadCacheDate, string downloadCacheString, bool isLatestVersion, bool isAbsoluteLatestVersion,
             bool isPrerelease, string releaseNotes, string projectSourceUrl, string packageSourceUrl, string docsUrl, string mailingListUrl, string bugTrackerUrl, string downloadCacheStatus,
-            string packageScanStatus, DateTime? packageScanResultDate, string packageScanFlagResult)
+            string packageScanStatus, DateTime? packageScanResultDate, string packageScanFlagResult, string packageFeed)
             : base(identity.Id, identity.Version)
         {
             _summary = summary;
@@ -108,6 +109,7 @@ namespace NuGet.Protocol
             _packageScanStatus = packageScanStatus;
             _packageScanResultDate = packageScanResultDate;
             _packageScanFlagResult = packageScanFlagResult;
+            _packageFeed = packageFeed;
         }
 
         public long? PackageSize => _packageSize;
@@ -140,5 +142,6 @@ namespace NuGet.Protocol
         public string PackageScanStatus => _packageScanStatus;
         public DateTime? PackageScanResultDate => _packageScanResultDate;
         public string PackageScanFlagResult => _packageScanFlagResult;
+        public string PackageFeed => _packageFeed;
     }
 }

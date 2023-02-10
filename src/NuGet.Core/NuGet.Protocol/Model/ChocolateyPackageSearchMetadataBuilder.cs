@@ -47,6 +47,7 @@ namespace NuGet.Protocol.Core.Types
             public string PackageScanStatus { get; set; }
             public DateTime? PackageScanResultDate { get; set; }
             public string PackageScanFlagResult { get; set; }
+            public string PackageFeed { get; set; }
         }
     }
 }

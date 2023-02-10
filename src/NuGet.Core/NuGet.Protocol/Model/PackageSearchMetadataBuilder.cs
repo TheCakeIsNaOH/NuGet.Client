@@ -168,6 +168,7 @@ namespace NuGet.Protocol.Core.Types
                 PackageScanStatus = _metadata.PackageScanStatus,
                 PackageScanResultDate = _metadata.PackageScanResultDate,
                 PackageScanFlagResult = _metadata.PackageScanFlagResult,
+                PackageFeed = _metadata.PackageFeed,
 
                 //////////////////////////////////////////////////////////
                 // End - Chocolatey Specific Modification

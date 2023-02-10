@@ -93,6 +93,11 @@ namespace NuGet.Protocol
             var searchResults = searchResultMetadata
                 .Select(m => m.WithVersions(() => GetVersions(m, filter)))
                 .Select(m => metadataCache.GetObject((PackageSearchMetadataBuilder.ClonedPackageSearchMetadata)m))
+                .Select(m =>
+                {
+                    m.PackageFeed = _client?.PackageSource;
+                    return m;
+                })
                 .ToArray();
 
             return searchResults;
